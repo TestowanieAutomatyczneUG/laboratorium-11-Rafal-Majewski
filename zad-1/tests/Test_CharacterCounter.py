@@ -36,6 +36,18 @@ class Test_CharacterCounter(unittest.TestCase):
 			characterCounter.saveToFile("./test.txt")
 		mockOpen.assert_called_once_with("./test.txt", "w")
 
+	def test_saveToFile_effect_with_content_aafs(self):
+		characterCounter = CharacterCounter()
+		characterCounter.addLine("aafs")
+		with unittest.mock.patch("builtins.open") as mockOpen:
+			characterCounter.saveToFile("./test.txt")
+		self.assertEqual(
+			mockOpen.return_value.__enter__.return_value.write.call_args_list,
+			[
+				unittest.mock.call("a2\nf1\ns1\n"),
+			]
+		)
+
 	def test_loadFromFile_with_content_aafs(self):
 		characterCounter = CharacterCounter()
 		with unittest.mock.patch("builtins.open", unittest.mock.mock_open(read_data="a2\nf1\ns1\n")) as mockOpen:
@@ -53,6 +65,16 @@ class Test_CharacterCounter(unittest.TestCase):
 		with unittest.mock.patch("builtins.open", unittest.mock.mock_open(read_data="a2f1\ns1\n")):
 			with self.assertRaises(ValueError):
 				characterCounter.loadFromFile("./test.txt")
+
+
+	def test_loadFromFile_effect_with_incorrect_content(self):
+		characterCounter = CharacterCounter()
+		with unittest.mock.patch("builtins.open", unittest.mock.mock_open(read_data="addsd2s1\n")) as mockOpen:
+			try:
+				characterCounter.loadFromFile("./test.txt")
+			except ValueError:
+				pass
+		self.assertEqual(characterCounter.get(), {})
 	
 	def test_log_with_content_aafs_nddw(self):
 		characterCounter = CharacterCounter(doLog=True)

@@ -61,3 +61,18 @@ class Test_FriendShips(unittest.TestCase):
 	def test_areFriends_keyError(self):
 		with patch.object(FriendShips, "areFriends", MagicMock(side_effect=KeyError)):
 			self.assertRaises(KeyError, self.friendShipsDatabase.run, "ARE FRIENDS: Adam, Eve")
+
+	def test_isFriend_if_called(self):
+		with patch.object(FriendShips, "isFriend", MagicMock(return_value=True)):
+			self.friendShipsDatabase.run("IS FRIEND: Adam -> Eve")
+			FriendShips.isFriend.assert_called_once_with("Adam", "Eve")
+	
+	def test_areFriends_if_called(self):
+		with patch.object(FriendShips, "areFriends", MagicMock(return_value=True)):
+			self.friendShipsDatabase.run("ARE FRIENDS: Adam, Eve")
+			FriendShips.areFriends.assert_called_once_with("Adam", "Eve")
+	
+	def test_addFriend_if_called(self):
+		with patch.object(FriendShips, "addFriend", MagicMock(return_value=None)):
+			self.friendShipsDatabase.run("ADD FRIEND: Adam -> Eve")
+			FriendShips.addFriend.assert_called_once_with("Adam", "Eve")

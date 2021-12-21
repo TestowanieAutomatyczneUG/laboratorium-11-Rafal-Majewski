@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, patch
 
 
 class Test_NotesService(unittest.TestCase):
-	def test_add_returning_added_note(self,):
+	def test_add_returning_added_note(self):
 		note = Note("test", 3)
 		with patch.object(NotesStorage, "add", MagicMock(return_value=note)):
 			notesService = NotesService()

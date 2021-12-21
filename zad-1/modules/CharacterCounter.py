@@ -16,7 +16,6 @@ class CharacterCounter:
 				with open("./log.txt", "a") as file:
 					file.write(character)
 			if character not in self.__countByCharacter:
-				# append the character to log.txt file
 				self.__countByCharacter[character] = 0
 			self.__countByCharacter[character] += 1
 	def addLine(self, line: str) -> None:
